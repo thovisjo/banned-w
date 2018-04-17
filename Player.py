@@ -14,6 +14,7 @@ class Player(pygame.sprite.Sprite):
         (self.rect.x, self.rect.y) = position
         self.direction = direction
         self.orientation = orientation
+        # Just a random comment
 
     def move_forward(amount):
         
