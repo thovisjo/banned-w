@@ -17,7 +17,7 @@ black = (0,0,0)
 white = (255,255,255)
 gray = (152,152,152)
 
-def rotate_center(image, rect, angle):
+def rotate_sprite(image, rect, angle):
         rotate_image = pygame.transform.rotate(image, angle)
         rotate_rect = rotate_image.get_rect(center=rect.center)
         return rotate_image,rotate_rect
