@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
 
-import pygame, random, sys, os, logging, math, Player
-assert sys.version_info >= 3.4, 'This script requires at least Python 3.4'
+import pygame, random, sys, os, logging, math
+from player import Player, Bullet
+assert sys.version_info >= (3,4), 'This script requires at least Python 3.4'
 
 logging.basicConfig(format = ' [%(filename)s:%(lineno)d] %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,7 +29,11 @@ def main():
     clock = pygame.time.Clock()
     enemy_count = 3
     kills = 0
-
+    enemies = []
+    bullets = []
+    players = pygame.sprite.Group()
+    player = Player([200,200],[0,0],3,(20,20), 0)
+    players.add(player)
     while True:
         clock.tick(FPS)
         screen.fill(gray)
@@ -39,34 +44,41 @@ def main():
                 pygame.quit()
                 sys.exit(0)
 
-        if keys[pygame.K_w]:
-            player.move_forward(1)
+        keys = pygame.key.get_pressed()
 
         if keys[pygame.K_s]:
-            player.move_forward(-1)
+            player.move(yPlus = 1)
 
+        if keys[pygame.K_w]:
+            player.move(yPlus = -1)
+            
         if keys[pygame.K_d]:
-            player.strafe(1)
+            player.move(xPlus = 1)
 
         if keys[pygame.K_a]:
-            player.strafe(-1)
+            player.move(xPlus = -1)
 
-        if keys[pygame.K_e]:
-            player.rotate(1)
+        if keys[pygame.K_UP]:
+            player.rotate('up')
 
-        if keys[pygame.K_q]:
-            player.rotate(-1)
+        if keys[pygame.K_DOWN]:
+            player.rotate('down')
+
+        if keys[pygame.K_LEFT]:
+            player.rotate('left')
+
+        if keys[pygame.K_RIGHT]:
+            player.rotate("right")
 
         if keys[pygame.K_SPACE]:
             player.fire()
 
-        enemies.update()
-        bullets.update()
         players.update()
 
-        enemies.draw(screen)
         players.draw(screen)
-        bullets.draw(screen)
+
+        pygame.display.flip()
+        
 
         
         
