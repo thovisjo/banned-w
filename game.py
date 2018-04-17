@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-import pygame, random, sys, os, logging, math
+import pygame, random, sys, os, logging, math, Player
 assert sys.version_info >= 3.4, 'This script requires at least Python 3.4'
 
 logging.basicConfig(format = ' [%(filename)s:%(lineno)d] %(message)s', level=logging.INFO)

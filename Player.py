@@ -8,7 +8,7 @@ green = (0,255,0)
 class Player(pygame.sprite.Sprite):
     def __init__(self,position,direction,lives,size,orientation):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.iamge.load(str(img)).conver()
+        self.image = pygame.image.load(str(img)).conver()
         self.rect = self.image.get_rect()
         self.image.set_colorkey(green)
         (self.rect.x, self.rect.y) = position
@@ -49,6 +49,7 @@ class Player(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, position, angle, speed = 10):
+        
         
 
         
