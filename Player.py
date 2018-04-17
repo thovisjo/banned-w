@@ -98,9 +98,17 @@ class Player(pygame.sprite.Sprite):
         """
         """
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, position, direction, speed = 10):
-        self.
+    def __init__(self, position, angle, speed = 10):
         
+       pygame.sprite.Sprite.__init__(self)
+       self.image = pygame.image.load(str('bullet.png')).convert()
+       self.rect = self.image.get_rect()
+       (self.rect.x, self.rect.y) = position
+       self.angle = angle
+       self.speed = speed
+    def getPosition(self):
+       return self.position
+
         
 
         
