@@ -5,7 +5,7 @@ assert sys.version_info >= (3,4), 'This script requires at least Python 3.4'
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self,position,letter):
+    def __init__(self,position):
         pygame.sprite.Sprite.__init__(self)
         self.origPosition = position
         self.image = pygame.image.load(os.path.join('.', 'enemy.png')).convert()
@@ -42,13 +42,21 @@ class Enemy(pygame.sprite.Sprite):
             if playerLocation == self.position:
                 self.move((0,0))
 
-    def update(self,playerLocation,bullets):
+    def update(self,playerLocation, players,bullets):
         self.locatePlayer(playerLocation)
         for b in bullets:
             if pygame.sprite.collide_rect(b, self):
-                self.alive = 0
-                self.position = (1000,1000)
-                (self.rect.x, self.rect.y) = self.position
+                self.deactivate()
                 
+        for p in players:
+            if pygame.sprite.collide_rect(p, self):
+                self.deactivate()
+                p.die()
 
+    def deactivate(self):
+        self.alive = 0
+        self.position = (1000,1000)
+        (self.rect.x, self.rect.y) = self.position
+        self.kill()
+            
 

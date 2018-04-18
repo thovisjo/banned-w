@@ -94,11 +94,13 @@ class Player(pygame.sprite.Sprite):
         self.position = (self.rect.x, self.rect.y)
         for e in enemies:
             if pygame.sprite.collide_rect(e, self):
-                self.lives -=1
+
                 self.die()
 
     def die(self):
         self.position = (400,250)
+        (self.rect.x,self.rect.y) = self.position
+        self.lives -=1
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, position, angle, speed = 10):
         
@@ -138,6 +140,8 @@ class Bullet(pygame.sprite.Sprite):
                 self.speed = 0
                 self.position = (1000,1000)
                 (self.rect.x, self.rect.y) = self.position
+                e.deactivate()
+                self.kill()
 
         
             

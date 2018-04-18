@@ -23,9 +23,16 @@ def fire(player_obj):
     new_bullet = Bullet((player_obj.rect.center), player_obj.rotation)
     return new_bullet
 
-def new_enemy():
-    new_enemy = Enemy((random.randint(1,780),random.randint(80,580)),'w')
+def new_enemy(player_obj):
+    new_enemy = Enemy(player_space_enemy_roller(player_obj))
     return new_enemy
+
+def player_space_enemy_roller(player_obj):
+    spawnpoint = (random.randint(1,780),random.randint(80,580))
+    if player_obj.position[0] + 500 < spawnpoint[0] < player_obj.position[0] - 500 and player_obj.position[1] + 500 < spawnpoint[1] < player_obj.position[1] - 50:
+        spawnpoint = player_space_enemy_roller(player_obj)
+    return spawnpoint
+        
 
 def main():
     pygame.init()
@@ -37,7 +44,7 @@ def main():
     enemies = pygame.sprite.Group()
     players = pygame.sprite.Group()
     player = Player([400,250],[0,0],3,(20,20), 0)
-    enemies.add(new_enemy())
+    enemies.add(new_enemy(player))
     bullets = pygame.sprite.Group()
     players.add(player)
     mixer.init()
@@ -59,16 +66,16 @@ def main():
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_s]:
-            player.move(yPlus = 1)
+            player.move(yPlus = 2)
 
         if keys[pygame.K_w]:
-            player.move(yPlus = -1)
+            player.move(yPlus = -2)
             
         if keys[pygame.K_d]:
-            player.move(xPlus = 1)
+            player.move(xPlus = 2)
 
         if keys[pygame.K_a]:
-            player.move(xPlus = -1)
+            player.move(xPlus = -2)
 
         if keys[pygame.K_UP]:
             player.rotate('up')
@@ -105,13 +112,13 @@ def main():
         if times_added*2000 < pygame.time.get_ticks():
             times_added +=1
             for i in range(0,times_added):
-                new_nme = new_enemy()
+                new_nme = new_enemy(player)
                 enemies.add(new_nme)
 
 
         players.update(enemies)
         bullets.update(enemies)
-        enemies.update(player.position, bullets)
+        enemies.update(player.position, players, bullets)
         enemies.draw(screen)
         players.draw(screen)
         bullets.draw(screen)
