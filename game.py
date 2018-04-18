@@ -36,7 +36,7 @@ def main():
     players = pygame.sprite.Group()
     player = Player([200,200],[0,0],3,(20,20), 0)
     first_enemy = Enemy((random.randint(1,780),random.randint(80,580)),'w')
-    enemies.add(new_enemy)
+    enemies.add(first_enemy)
     bullets = pygame.sprite.Group()
     players.add(player)
     mixer.init()
@@ -86,7 +86,7 @@ def main():
 
         players.update()
         bullets.update()
-        enemies.update()
+        enemies.update(player.position, bullets)
         enemies.draw(screen)
         players.draw(screen)
         bullets.draw(screen)
