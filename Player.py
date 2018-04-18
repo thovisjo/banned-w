@@ -90,8 +90,12 @@ class Player(pygame.sprite.Sprite):
 
 
 
-    def update(self):
+    def update(self, enemies):
         self.position = (self.rect.x, self.rect.y)
+        for e in enemies:
+            if pygame.sprite.collide_rect(e, self):
+                self.lives -=1
+                self.die()
 
     def die(self):
         self.position = (400,250)
@@ -124,10 +128,18 @@ class Bullet(pygame.sprite.Sprite):
         if self.angle == 3:
             self.rect.x += self.speed
 
+        if self.rect.y <= 75:
+            self.speed = 0
+            self.position = (1000,1000)
+            (self.rect.x, self.rect.y) = self.position
+
         for e in enemies:
             if pygame.sprite.collide_rect(e, self):
-                speed = 0
+                self.speed = 0
                 self.position = (1000,1000)
+                (self.rect.x, self.rect.y) = self.position
+
+        
             
         
 

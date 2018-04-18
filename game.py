@@ -11,11 +11,12 @@ logger = logging.getLogger(__name__)
 
 screen_size = (800,600)
 FPS = 60
-lives = 5
+lives = 3
 
 black = (0,0,0)
 white = (255,255,255)
 gray = (152,152,152)
+
 
 def fire(player_obj):
         
@@ -32,11 +33,11 @@ def main():
     clock = pygame.time.Clock()
     enemy_count = 2
     kills = 0
+    times_added = 0
     enemies = pygame.sprite.Group()
     players = pygame.sprite.Group()
-    player = Player([200,200],[0,0],3,(20,20), 0)
-    first_enemy = Enemy((random.randint(1,780),random.randint(80,580)),'w')
-    enemies.add(first_enemy)
+    player = Player([400,250],[0,0],3,(20,20), 0)
+    enemies.add(new_enemy())
     bullets = pygame.sprite.Group()
     players.add(player)
     mixer.init()
@@ -71,20 +72,44 @@ def main():
 
         if keys[pygame.K_UP]:
             player.rotate('up')
+            bullets.add(fire(player))
 
         if keys[pygame.K_DOWN]:
             player.rotate('down')
+            bullets.add(fire(player))
 
         if keys[pygame.K_LEFT]:
             player.rotate('left')
+            bullets.add(fire(player))
 
         if keys[pygame.K_RIGHT]:
             player.rotate("right")
-
-        if keys[pygame.K_SPACE]:
             bullets.add(fire(player))
+            
 
-        players.update()
+        if player.lives <= 0:
+            pygame.quit()
+            sys.exit(0)
+
+        if player.lives > 0:
+            pygame.draw.rect(screen, (255,0,0), (150, 20, 15, 15))
+
+        if player.lives > 1:
+            pygame.draw.rect(screen, (255,0,0), (175, 20, 15, 15))
+
+        if player.lives > 2:
+            pygame.draw.rect(screen, (255,0,0), (200, 20, 15, 15))
+
+
+
+        if times_added*2000 < pygame.time.get_ticks():
+            times_added +=1
+            for i in range(0,times_added):
+                new_nme = new_enemy()
+                enemies.add(new_nme)
+
+
+        players.update(enemies)
         bullets.update(enemies)
         enemies.update(player.position, bullets)
         enemies.draw(screen)

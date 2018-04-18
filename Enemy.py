@@ -3,13 +3,15 @@ import pygame, random, sys, os, logging
 
 assert sys.version_info >= (3,4), 'This script requires at least Python 3.4'
 
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,position,letter):
         pygame.sprite.Sprite.__init__(self)
         self.origPosition = position
         self.image = pygame.image.load(os.path.join('.', 'enemy.png')).convert()
         self.rect = self.image.get_rect()
-        (self.rect.x, self.rect.y) = (0, 0)
+        self.image.set_colorkey((255,255,255))
+        (self.rect.x, self.rect.y) = position
         self.ramp_up = 1
         self.max_dx = 5
         self.alive = 1
@@ -29,23 +31,15 @@ class Enemy(pygame.sprite.Sprite):
 
     def locatePlayer(self,playerLocation):
         if self.alive:
-            if playerLocation[0] > self.rect.x & playerLocation[1] > self.rect.y:
-                self.move((5,5))
-            elif playerLocation[0] < self.rect.x & playerLocation[1] < self.rect.y:
-                self.move((-5,-5))
-            elif playerLocation[0] > self.rect.x & playerLocation[1] < self.rect.y:
-                self.move((5,-5))
-            elif playerLocation[0] < self.rect.x & playerLocation[1] > self.rect.y:
-                self.move((5, -5))
-            elif playerLocation[0] == self.rect.x & playerLocation[1] > self.rect.y:
-                self.move((0,5))
-            elif playerLocation[0] == self.rect.x & playerLocation[1] < self.rect.y:
-                self.move((0, -5))
-            elif playerLocation[0] > self.rect.x & playerLocation[1] == self.rect.y:
-                self.move((5, 0))
-            elif playerLocation[0] < self.rect.x & playerLocation[1] == self.rect.y:
-                self.move((-5,0))
-            else:
+            if playerLocation[0] < self.position[0]:
+                self.move((-2,0))
+            if playerLocation[0] > self.position[0]:
+                self.move((2,0))
+            if playerLocation[1] < self.position[1]:
+                self.move((0,-2))
+            if playerLocation[1] > self.position[1]:
+                self.move((0,2))
+            if playerLocation == self.position:
                 self.move((0,0))
 
     def update(self,playerLocation,bullets):
@@ -53,7 +47,8 @@ class Enemy(pygame.sprite.Sprite):
         for b in bullets:
             if pygame.sprite.collide_rect(b, self):
                 self.alive = 0
-                self.location = (1000,1000)
+                self.position = (1000,1000)
+                (self.rect.x, self.rect.y) = self.position
                 
 
 
