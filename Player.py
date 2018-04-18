@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y < 575 and yPlus > 0:
             self.rect.y += yPlus
 
-        position = (self.rect.y, self.rect.x)
+        position = (self.rect.x, self.rect.y)
 
     def rotate(self, key):
         temp_loc = self.position
@@ -84,31 +84,53 @@ class Player(pygame.sprite.Sprite):
                 self.rotation = 3
 
         self.position = temp_loc
-        print(self.position)
-            
                 
                 
 
 
-    def fire(self):
-        
-        new_bullet = Bullet((self.position[0],self.position[1], rotation))
+
 
     def update(self):
-        """
-        """
+        self.position = (self.rect.x, self.rect.y)
+
+    def die(self):
+        self.position = (400,250)
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, position, angle, speed = 10):
         
        pygame.sprite.Sprite.__init__(self)
-       self.image = pygame.image.load(str('bullet.png')).convert()
+       self.image = pygame.image.load(str('smbullet.png')).convert()
+       self.image.set_colorkey(black)
        self.rect = self.image.get_rect()
        (self.rect.x, self.rect.y) = position
        self.angle = angle
        self.speed = speed
+       self.invisble = False
+       self.position = (self.rect.x, self.rect.y)
+
     def getPosition(self):
        return self.position
 
+    def update(self,enemies):
+        if self.angle == 0:
+            self.rect.y -= self.speed
+
+        if self.angle == 1:
+           self.rect.x -= self.speed 
+
+        if self.angle == 2:
+            self.rect.y += self.speed
+
+        if self.angle == 3:
+            self.rect.x += self.speed
+
+        for e in enemies:
+            if pygame.sprite.collide_rect(e, self):
+                speed = 0
+                self.position = (1000,1000)
+            
         
+
+        position = (self.rect.x, self.rect.y)
 
         

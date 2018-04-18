@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
-
+from pygame import *
 import pygame, random, sys, os, logging, math
+from Enemy import Enemy
 from player import Player, Bullet
 assert sys.version_info >= (3,4), 'This script requires at least Python 3.4'
 
@@ -10,34 +11,44 @@ logger = logging.getLogger(__name__)
 
 screen_size = (800,600)
 FPS = 60
-gravity = 2
-friction = .03
 lives = 5
 
 black = (0,0,0)
 white = (255,255,255)
 gray = (152,152,152)
 
-def rotate_sprite(image, rect, angle):
-        rotate_image = pygame.transform.rotate(image, angle)
-        rotate_rect = rotate_image.get_rect(center=rect.center)
-        return rotate_image,rotate_rect
+def fire(player_obj):
+        
+    new_bullet = Bullet((player_obj.rect.center), player_obj.rotation)
+    return new_bullet
+
+def new_enemy():
+    new_enemy = Enemy((random.randint(1,780),random.randint(80,580)),'w')
+    return new_enemy
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode(screen_size)
     clock = pygame.time.Clock()
-    enemy_count = 3
+    enemy_count = 2
     kills = 0
-    enemies = []
-    bullets = []
+    enemies = pygame.sprite.Group()
     players = pygame.sprite.Group()
     player = Player([200,200],[0,0],3,(20,20), 0)
+    first_enemy = Enemy((random.randint(1,780),random.randint(80,580)),'w')
+    enemies.add(new_enemy)
+    bullets = pygame.sprite.Group()
     players.add(player)
+    mixer.init()
+    mixer.music.load('425255__eardeer__howtowintheloundnesswars.ogg')
+    mixer.music.play()
+    
     while True:
         clock.tick(FPS)
         screen.fill(gray)
         pygame.draw.lines(screen, black, False, [(0,75),(800,75)])
+
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -71,12 +82,14 @@ def main():
             player.rotate("right")
 
         if keys[pygame.K_SPACE]:
-            player.fire()
+            bullets.add(fire(player))
 
         players.update()
-
+        bullets.update()
+        enemies.update()
+        enemies.draw(screen)
         players.draw(screen)
-
+        bullets.draw(screen)
         pygame.display.flip()
         
 
