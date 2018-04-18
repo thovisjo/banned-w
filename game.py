@@ -85,7 +85,7 @@ def main():
             bullets.add(fire(player))
 
         players.update()
-        bullets.update()
+        bullets.update(enemies)
         enemies.update(player.position, bullets)
         enemies.draw(screen)
         players.draw(screen)

@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y < 575 and yPlus > 0:
             self.rect.y += yPlus
 
-        position = (self.rect.x, self.rect.y)
+        self.position = (self.rect.x, self.rect.y)
 
     def rotate(self, key):
         temp_loc = self.position
